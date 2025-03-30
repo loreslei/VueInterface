@@ -1,44 +1,34 @@
 <template>
-    <table class="table mt-5">
-  <thead>
-    <tr>
-      <th scope="col">#</th>
-      <th scope="col">First</th>
-      <th scope="col">Last</th>
-      <th scope="col">Handle</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th scope="row">1</th>
-      <td>Mark</td>
-      <td>Otto</td>
-      <td>@mdo</td>
-    </tr>
-    <tr>
-      <th scope="row">2</th>
-      <td>Jacob</td>
-      <td>Thornton</td>
-      <td>@fat</td>
-    </tr>
-    <tr>
-      <th scope="row">3</th>
-      <td colspan="2">Larry the Bird</td>
-      <td>@twitter</td>
-    </tr>
-  </tbody>
-</table>
+  <div class=" d-flex justify-content-center">
+    <table class="table mt-5 w-75 border rounded">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Mark</td>
+        </tr>
+      </tbody>
+    </table>
+
+  </div>
+
 </template>
 
 <script>
-    export default{
-    }
+export default {
+}
 </script>
 
 <style>
-    input.bg-white{
-        background-color: #F8F9FA !important;
-        color: var(--charcoal) !important;
-    }
+input.bg-white {
+  background-color: #F8F9FA !important;
+}
 
+th,
+td {
+  color: var(--charcoal) !important;
+}
 </style>

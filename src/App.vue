@@ -1,7 +1,9 @@
 <template>
   <TheNavbar></TheNavbar>
+  <h1 class="mt-5 header-text">Busca de Operadoras  <i class="fa-regular fa-building mx-3"></i></h1>
   <SearchInp></SearchInp>
   <Table_Operadoras></Table_Operadoras>
+  <footer class="fixed-bottom mb-4">© Lorenna Aguiar Nunes</footer>
   
 </template>
 
@@ -33,6 +35,8 @@ export default {
 
 body{
   background-color: var(--mint-cream);
+  width: 100vw;
+  height: 100vh;
 }
 
 #app {

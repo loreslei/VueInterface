@@ -17,4 +17,12 @@
         background-color: var(--input-bg-color) !important;
     }
 
+    button, input{
+        padding: .9rem !important;
+    }
+
+    button{
+        padding: .9rem 1.5rem !important;
+    }
+
 </style>

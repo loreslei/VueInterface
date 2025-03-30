@@ -29,6 +29,6 @@ input.bg-white {
 
 th,
 td {
-  color: var(--charcoal) !important;
+  color: var(--charcoal-2) !important;
 }
 </style>

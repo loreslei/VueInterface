@@ -3,7 +3,7 @@
     <div class="container-fluid">
         <a class="navbar-brand" href="#">
         <img src="../assets/logo.png" alt="Logo" width="30" height="24" class="d-inline-block align-text-top">
-            VueInterface Website
+            VueInterface Website 
         </a>
     </div>
     </nav>

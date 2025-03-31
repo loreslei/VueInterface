@@ -1,6 +1,6 @@
 <template>
   <div class="d-flex justify-content-center container">
-    <div class="table-responsive w-75">
+    <div class="table-responsive w-75" style="margin: 0 auto;">
       <table class="table mt-5 border rounded">
         <thead>
           <tr>

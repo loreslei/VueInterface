@@ -1,15 +1,22 @@
 <template>
   <div class="d-flex justify-content-center container">
-    <div class="table-responsive w-75" style="max-height: 500px; overflow-y: auto;">
+    <div class="table-responsive w-75">
       <table class="table mt-5 border rounded">
         <thead>
           <tr>
-            <th v-for="header in tableHeaders" :key="header">{{ header }}</th>
+            <th class="text-title" v-for="header in tableHeaders" :key="header">{{ header }}</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody style="overflow-y: auto; max-height: 500px; display: block;">
           <tr v-for="item in paginatedItems" :key="item.registro_ans">
-            <td v-for="header in tableHeaders" :key="header">{{ item[header] }}</td>
+            <td
+              class="text-truncate"
+              v-for="header in tableHeaders"
+              :key="header"
+              :title="item[header]"
+            >
+              {{ item[header] }}
+            </td>
           </tr>
         </tbody>
       </table>
@@ -103,5 +110,12 @@ export default {
 th,
 td {
   color: var(--charcoal-2) !important;
+  min-width: 150px; /* Ajuste conforme necessário */
+  padding: 8px;
+  white-space: nowrap;
+}
+
+body {
+  font-family: 'Varela Round', sans-serif;
 }
 </style>

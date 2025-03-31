@@ -10,7 +10,8 @@
         <tbody>
           <tr v-for="item in paginatedItems" :key="item.registro_ans">
             <td
-              class="text-truncate text-capitalize"
+              class="text-truncate"
+              :class="{ 'text-capitalize': header !== emailHeader }"
               v-for="header in formattedHeaders"
               :key="header"
               :title="isDateHeader(header) ? formatDate(item[originalHeaders[header]]) : item[originalHeaders[header]]"
@@ -56,6 +57,7 @@ export default {
       maxVisiblePages: 5,
       originalHeaders: {},
       dateHeaders: ['data_registro_ans'],
+      emailHeader: 'email', // Adicione o header do email aqui
     };
   },
   computed: {
@@ -98,7 +100,7 @@ export default {
           this.items = response.data.map((item) => {
             const newItem = {};
             for (const key in item) {
-              if (typeof item[key] === 'string' && key !== 'uf') { // Adicionado o filtro para 'uf'
+              if (typeof item[key] === 'string' && key !== 'uf') {
                 newItem[key] = item[key].toLowerCase();
               } else {
                 newItem[key] = item[key];
@@ -123,7 +125,7 @@ export default {
       const day = String(date.getDate()).padStart(2, '0');
       const month = String(date.getMonth() + 1).padStart(2, '0');
       const year = date.getFullYear();
-      return `${day}/${month}/${year}`;
+      return `<span class="math-inline">\{day\}/</span>{month}/${year}`;
     },
     isDateHeader(header) {
       return this.dateHeaders.includes(this.originalHeaders[header]);

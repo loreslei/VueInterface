@@ -8,7 +8,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="item in filteredItems" :key="item.registro_ans">
+          <tr v-for="item in paginatedItems" :key="item.registro_ans">
             <td
               class="text-truncate"
               v-for="header in tableHeaders"
@@ -58,12 +58,12 @@ export default {
   },
   computed: {
     totalPages() {
-      return Math.ceil(this.filteredItems.length / this.itemsPerPage);
+      return Math.ceil(this.items.length / this.itemsPerPage);
     },
     paginatedItems() {
       const start = (this.currentPage - 1) * this.itemsPerPage;
       const end = start + this.itemsPerPage;
-      return this.filteredItems.slice(start, end);
+      return this.items.slice(start, end);
     },
     visiblePages() {
       let startPage = Math.max(1, this.currentPage - Math.floor(this.maxVisiblePages / 2));
@@ -75,16 +75,6 @@ export default {
 
       return Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i);
     },
-    filteredItems() {
-      if (!this.searchQuery) {
-        return this.items;
-      }
-      return this.items.filter((item) => {
-        return Object.values(item).some((value) => {
-          return String(value).toLowerCase().includes(this.searchQuery.toLowerCase());
-        });
-      });
-    },
   },
   methods: {
     changePage(page) {
@@ -93,7 +83,12 @@ export default {
       }
     },
     fetchData() {
-      axios.get('https://web-production-30e30.up.railway.app/operadoras')
+      const url = this.searchQuery
+        ? `https://web-production-30e30.up.railway.app/operadoras/${this.searchQuery}`
+        : 'https://web-production-30e30.up.railway.app/operadoras';
+
+      axios
+        .get(url)
         .then((response) => {
           this.items = response.data;
           if (this.items.length > 0) {
@@ -107,6 +102,11 @@ export default {
   },
   mounted() {
     this.fetchData();
+  },
+  watch: {
+    searchQuery() {
+      this.fetchData();
+    },
   },
 };
 </script>

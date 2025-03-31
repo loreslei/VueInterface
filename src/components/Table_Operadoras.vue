@@ -90,7 +90,17 @@ export default {
       axios
         .get(url)
         .then((response) => {
-          this.items = response.data;
+          this.items = response.data.map((item) => {
+            const newItem = {};
+            for (const key in item) {
+              if (typeof item[key] === 'string') {
+                newItem[key] = item[key].toLowerCase();
+              } else {
+                newItem[key] = item[key];
+              }
+            }
+            return newItem;
+          });
           if (this.items.length > 0) {
             this.tableHeaders = Object.keys(this.items[0]);
           }
@@ -132,5 +142,29 @@ td {
 
 body {
   font-family: 'Varela Round', sans-serif;
+}
+
+/* Estilos da Barra de Rolagem */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* Estilos da Barra de Rolagem para Firefox */
+html {
+  scrollbar-width: thin;
+  scrollbar-color: #888 #f1f1f1;
 }
 </style>

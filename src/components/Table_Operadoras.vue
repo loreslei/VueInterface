@@ -166,6 +166,7 @@ body {
 /* Estilos da Barra de Rolagem */
 ::-webkit-scrollbar {
   width: 8px;
+  transform: translateY(-1rem);
 }
 
 ::-webkit-scrollbar-track {
@@ -174,6 +175,7 @@ body {
 
 ::-webkit-scrollbar-thumb {
   background: #888;
+  transform: translateY(-1rem);
   border-radius: 4px;
 }
 

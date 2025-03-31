@@ -55,7 +55,7 @@ export default {
       tableHeaders: [],
       maxVisiblePages: 5,
       originalHeaders: {},
-      dateHeaders: ['data_registro_ans'], 
+      dateHeaders: ['data_registro_ans'],
     };
   },
   computed: {
@@ -98,8 +98,8 @@ export default {
           this.items = response.data.map((item) => {
             const newItem = {};
             for (const key in item) {
-              if (typeof item[key] === 'string') {
-                newItem[key] = item[key].toLowerCase(); // Converter para lowercase
+              if (typeof item[key] === 'string' && key !== 'uf') { // Adicionado o filtro para 'uf'
+                newItem[key] = item[key].toLowerCase();
               } else {
                 newItem[key] = item[key];
               }
@@ -163,10 +163,9 @@ body {
   font-family: 'Varela Round', sans-serif;
 }
 
-/* Estilos da Barra de Rolagem */
+
 ::-webkit-scrollbar {
   width: 8px;
-  transform: translateY(-1rem);
 }
 
 ::-webkit-scrollbar-track {
@@ -175,7 +174,6 @@ body {
 
 ::-webkit-scrollbar-thumb {
   background: #888;
-  transform: translateY(-1rem);
   border-radius: 4px;
 }
 
@@ -183,7 +181,7 @@ body {
   background: #555;
 }
 
-/* Estilos da Barra de Rolagem para Firefox */
+
 html {
   scrollbar-width: thin;
   scrollbar-color: #888 #f1f1f1;

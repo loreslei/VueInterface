@@ -4,13 +4,13 @@
       <table class="table mt-5 border rounded">
         <thead>
           <tr>
-            <th class="text-title" v-for="header in tableHeaders" :key="header">{{ header }}</th>
+            <th class="text-uppercase" v-for="header in tableHeaders" :key="header">{{ header }}</th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="item in paginatedItems" :key="item.registro_ans">
             <td
-              class="text-truncate"
+              class="text-truncate text-capitalize"
               v-for="header in tableHeaders"
               :key="header"
               :title="item[header]"

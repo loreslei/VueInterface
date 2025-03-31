@@ -20,7 +20,7 @@
         <li class="page-item" :class="{ disabled: currentPage === 1 }">
           <a class="page-link" href="#" @click.prevent="changePage(currentPage - 1)">Anterior</a>
         </li>
-        <li class="page-item" v-for="page in totalPages" :key="page" :class="{ active: currentPage === page }">
+        <li class="page-item" v-for="page in visiblePages" :key="page" :class="{ active: currentPage === page }">
           <a class="page-link" href="#" @click.prevent="changePage(page)">{{ page }}</a>
         </li>
         <li class="page-item" :class="{ disabled: currentPage === totalPages }">
@@ -39,8 +39,9 @@ export default {
     return {
       items: [],
       currentPage: 1,
-      itemsPerPage: 5,
+      itemsPerPage: 10,
       tableHeaders: [],
+      maxVisiblePages: 5,
     };
   },
   computed: {
@@ -51,6 +52,16 @@ export default {
       const start = (this.currentPage - 1) * this.itemsPerPage;
       const end = start + this.itemsPerPage;
       return this.items.slice(start, end);
+    },
+    visiblePages() {
+      let startPage = Math.max(1, this.currentPage - Math.floor(this.maxVisiblePages / 2));
+      let endPage = Math.min(this.totalPages, startPage + this.maxVisiblePages - 1);
+
+      if (endPage - startPage + 1 < this.maxVisiblePages) {
+        startPage = Math.max(1, endPage - this.maxVisiblePages + 1);
+      }
+
+      return Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i);
     },
   },
   methods: {

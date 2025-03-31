@@ -7,7 +7,7 @@
             <th class="text-title" v-for="header in tableHeaders" :key="header">{{ header }}</th>
           </tr>
         </thead>
-        <tbody style="overflow-y: auto; max-height: 500px; display: block;">
+        <tbody>
           <tr v-for="item in paginatedItems" :key="item.registro_ans">
             <td
               class="text-truncate"
@@ -15,7 +15,9 @@
               :key="header"
               :title="item[header]"
             >
-              {{ item[header] }}
+              <div style="max-height: 500px; overflow-y: auto;">
+                {{ item[header] }}
+              </div>
             </td>
           </tr>
         </tbody>
@@ -110,7 +112,7 @@ export default {
 th,
 td {
   color: var(--charcoal-2) !important;
-  min-width: 150px; /* Ajuste conforme necessário */
+  min-width: 150px;
   padding: 8px;
   white-space: nowrap;
 }

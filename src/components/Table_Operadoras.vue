@@ -7,25 +7,15 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="item in paginatedItems" :key="item.registro_ans">
+        <tr v-for="item in displayedItems" :key="item.registro_ans">
           <td v-for="header in tableHeaders" :key="header">{{ item[header] }}</td>
         </tr>
       </tbody>
     </table>
 
-    <nav id="nav-pages" aria-label="Page navigation example">
-      <ul class="pagination mt-4">
-        <li class="page-item" :class="{ disabled: currentPage === 1 }">
-          <a class="page-link" href="#" @click.prevent="changePage(currentPage - 1)">Anterior</a>
-        </li>
-        <li class="page-item" v-for="page in totalPages" :key="page" :class="{ active: currentPage === page }">
-          <a class="page-link" href="#" @click.prevent="changePage(page)">{{ page }}</a>
-        </li>
-        <li class="page-item" :class="{ disabled: currentPage === totalPages }">
-          <a class="page-link" href="#" @click.prevent="changePage(currentPage + 1)">Próximo</a>
-        </li>
-      </ul>
-    </nav>
+    <button v-if="displayedItems.length < items.length" @click="loadMoreItems" class="btn btn-primary mt-3">
+      Mostrar Mais
+    </button>
   </div>
 </template>
 
@@ -36,43 +26,35 @@ export default {
   data() {
     return {
       items: [],
-      currentPage: 1,
+      displayedItems: [],
       itemsPerPage: 10,
       tableHeaders: [],
+      offset: 0, // Adicionamos um offset para controlar o carregamento dos dados
     };
   },
-  computed: {
-    totalPages() {
-      return Math.ceil(this.items.length / this.itemsPerPage);
-    },
-    paginatedItems() {
-      const start = (this.currentPage - 1) * this.itemsPerPage;
-      const end = start + this.itemsPerPage;
-      return this.items.slice(start, end);
-    },
-  },
   methods: {
-    changePage(page) {
-      if (page >= 1 && page <= this.totalPages) {
-        this.currentPage = page;
-      }
-    },
     fetchData() {
-      //const baseUrl = process.env.VUE_APP_API_BASE_URL;
-      axios.get('https://web-production-30e30.up.railway.app/operadoras')
+      axios.get(`https://web-production-30e30.up.railway.app/operadoras?offset=${this.offset}&limit=${this.itemsPerPage}`)
         .then(response => {
-          this.items = response.data;
-          if (this.items.length > 0) {
-            this.tableHeaders = Object.keys(this.items[0]);
+          if (response.data.length > 0) {
+            this.items.push(...response.data); // Adiciona os novos dados ao array items
+            this.displayedItems.push(...response.data); // Adiciona os novos dados ao array displayedItems
+            if (this.tableHeaders.length === 0) {
+              this.tableHeaders = Object.keys(response.data[0]); // Define os cabeçalhos da tabela na primeira chamada
+            }
+            this.offset += this.itemsPerPage; // Atualiza o offset para a próxima chamada
           }
         })
         .catch(error => {
           console.error('Erro ao buscar dados:', error);
         });
     },
+    loadMoreItems() {
+      this.fetchData(); // Carrega mais 10 itens
+    },
   },
   mounted() {
-    this.fetchData();
+    this.fetchData(); // Carrega os primeiros 10 itens
   },
 };
 </script>
@@ -80,12 +62,7 @@ export default {
 <style>
 .table {
   align-self: center;
-}
-
-.nav-pages,
-.pagination {
-  align-self: center;
-  justify-self: center;
+  overflow-x: auto;
 }
 
 .container {

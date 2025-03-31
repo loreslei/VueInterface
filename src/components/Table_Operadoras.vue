@@ -57,7 +57,7 @@ export default {
       maxVisiblePages: 5,
       originalHeaders: {},
       dateHeaders: ['data_registro_ans'],
-      emailHeader: 'endereco eletronico', // Adicione o header do endereço eletrônico aqui
+      emailHeader: 'endereco_eletronico', 
     };
   },
   computed: {
@@ -147,6 +147,7 @@ export default {
 .pagination {
   align-self: center;
   justify-self: center;
+  margin: 0 auto;
 }
 
 .container {

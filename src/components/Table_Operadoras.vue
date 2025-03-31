@@ -4,19 +4,19 @@
       <table class="table mt-5 border rounded">
         <thead>
           <tr>
-            <th class="text-uppercase" v-for="header in tableHeaders" :key="header">{{ header }}</th>
+            <th class="text-uppercase" v-for="header in formattedHeaders" :key="header">{{ header }}</th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="item in paginatedItems" :key="item.registro_ans">
             <td
               class="text-truncate text-capitalize"
-              v-for="header in tableHeaders"
+              v-for="header in formattedHeaders"
               :key="header"
-              :title="item[header]"
+              :title="formatDate(item[originalHeaders[header]])"
             >
               <div style="max-height: 500px; overflow-y: auto;">
-                {{ item[header] }}
+                {{ formatDate(item[originalHeaders[header]]) }}
               </div>
             </td>
           </tr>
@@ -54,6 +54,7 @@ export default {
       itemsPerPage: 10,
       tableHeaders: [],
       maxVisiblePages: 5,
+      originalHeaders: {},
     };
   },
   computed: {
@@ -74,6 +75,9 @@ export default {
       }
 
       return Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i);
+    },
+    formattedHeaders() {
+      return this.tableHeaders.map((header) => header.replace(/_/g, ' '));
     },
   },
   methods: {
@@ -103,11 +107,22 @@ export default {
           });
           if (this.items.length > 0) {
             this.tableHeaders = Object.keys(this.items[0]);
+            this.tableHeaders.forEach((header) => {
+              this.originalHeaders[header.replace(/_/g, ' ')] = header;
+            });
           }
         })
         .catch((error) => {
           console.error('Erro ao buscar dados:', error);
         });
+    },
+    formatDate(dateString) {
+      if (!dateString) return '';
+      const date = new Date(dateString);
+      const day = String(date.getDate()).padStart(2, '0');
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const year = date.getFullYear();
+      return `${day}/${month}/${year}`;
     },
   },
   mounted() {

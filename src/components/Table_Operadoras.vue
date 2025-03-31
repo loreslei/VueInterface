@@ -13,10 +13,10 @@
               class="text-truncate text-capitalize"
               v-for="header in formattedHeaders"
               :key="header"
-              :title="formatDate(item[originalHeaders[header]])"
+              :title="isDateHeader(header) ? formatDate(item[originalHeaders[header]]) : item[originalHeaders[header]]"
             >
               <div style="max-height: 500px; overflow-y: auto;">
-                {{ formatDate(item[originalHeaders[header]]) }}
+                {{ isDateHeader(header) ? formatDate(item[originalHeaders[header]]) : item[originalHeaders[header]] }}
               </div>
             </td>
           </tr>
@@ -55,6 +55,7 @@ export default {
       tableHeaders: [],
       maxVisiblePages: 5,
       originalHeaders: {},
+      dateHeaders: ['data_registro_ans'], 
     };
   },
   computed: {
@@ -94,17 +95,7 @@ export default {
       axios
         .get(url)
         .then((response) => {
-          this.items = response.data.map((item) => {
-            const newItem = {};
-            for (const key in item) {
-              if (typeof item[key] === 'string') {
-                newItem[key] = item[key].toLowerCase();
-              } else {
-                newItem[key] = item[key];
-              }
-            }
-            return newItem;
-          });
+          this.items = response.data;
           if (this.items.length > 0) {
             this.tableHeaders = Object.keys(this.items[0]);
             this.tableHeaders.forEach((header) => {
@@ -123,6 +114,9 @@ export default {
       const month = String(date.getMonth() + 1).padStart(2, '0');
       const year = date.getFullYear();
       return `${day}/${month}/${year}`;
+    },
+    isDateHeader(header) {
+      return this.dateHeaders.includes(this.originalHeaders[header]);
     },
   },
   mounted() {

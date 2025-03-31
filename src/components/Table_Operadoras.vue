@@ -3,16 +3,12 @@
     <table class="table mt-5 w-75 border rounded">
       <thead>
         <tr>
-          <th scope="col">#</th>
-          <th scope="col">Nome</th>
-          <th scope="col">Descrição</th>
+          <th v-for="header in tableHeaders" :key="header">{{ header }}</th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="item in paginatedItems" :key="item.id">
-          <td>{{ item.id }}</td>
-          <td>{{ item.name }}</td>
-          <td>{{ item.description }}</td>
+        <tr v-for="item in paginatedItems" :key="item.registro_ans">
+          <td v-for="header in tableHeaders" :key="header">{{ item[header] }}</td>
         </tr>
       </tbody>
     </table>
@@ -34,16 +30,15 @@
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
   data() {
     return {
-      items: Array.from({ length: 100 }, (_, i) => ({
-        id: i + 1,
-        name: `Item ${i + 1}`,
-        description: `Descrição do Item ${i + 1}`
-      })),
+      items: [],
       currentPage: 1,
-      itemsPerPage: 10
+      itemsPerPage: 10,
+      tableHeaders: [],
     };
   },
   computed: {
@@ -54,29 +49,46 @@ export default {
       const start = (this.currentPage - 1) * this.itemsPerPage;
       const end = start + this.itemsPerPage;
       return this.items.slice(start, end);
-    }
+    },
   },
   methods: {
     changePage(page) {
       if (page >= 1 && page <= this.totalPages) {
         this.currentPage = page;
       }
-    }
-  }
+    },
+    fetchData() {
+      //const baseUrl = process.env.VUE_APP_API_BASE_URL;
+      axios.get('https://web-production-30e30.up.railway.app/operadoras')
+        .then(response => {
+          this.items = response.data;
+          if (this.items.length > 0) {
+            this.tableHeaders = Object.keys(this.items[0]);
+          }
+        })
+        .catch(error => {
+          console.error('Erro ao buscar dados:', error);
+        });
+    },
+  },
+  mounted() {
+    this.fetchData();
+  },
 };
 </script>
 
 <style>
-.table{
+.table {
   align-self: center;
 }
 
-.nav-pages, .pagination{
+.nav-pages,
+.pagination {
   align-self: center;
   justify-self: center;
 }
 
-.container{
+.container {
   flex-direction: column;
 }
 

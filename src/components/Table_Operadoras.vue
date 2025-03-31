@@ -95,7 +95,17 @@ export default {
       axios
         .get(url)
         .then((response) => {
-          this.items = response.data;
+          this.items = response.data.map((item) => {
+            const newItem = {};
+            for (const key in item) {
+              if (typeof item[key] === 'string') {
+                newItem[key] = item[key].toLowerCase(); // Converter para lowercase
+              } else {
+                newItem[key] = item[key];
+              }
+            }
+            return newItem;
+          });
           if (this.items.length > 0) {
             this.tableHeaders = Object.keys(this.items[0]);
             this.tableHeaders.forEach((header) => {

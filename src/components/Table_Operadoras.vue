@@ -125,7 +125,7 @@ export default {
       const day = String(date.getDate()).padStart(2, '0');
       const month = String(date.getMonth() + 1).padStart(2, '0');
       const year = date.getFullYear();
-      return `<span class="math-inline">\{day\}/</span>{month}/${year}`;
+      return `<span class="math-inline">${day}/${month}/${year}</span>`;
     },
     isDateHeader(header) {
       return this.dateHeaders.includes(this.originalHeaders[header]);

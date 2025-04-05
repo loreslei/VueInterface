@@ -11,7 +11,7 @@
           <tr v-for="item in paginatedItems" :key="item.registro_ans">
             <td
               class="text-truncate"
-              :class="{ 'text-capitalize': header !== emailHeader }"
+              :class="{ 'text-capitalize': shouldCapitalize(header) }"
               v-for="header in formattedHeaders"
               :key="header"
               :title="isDateHeader(header) ? formatDate(item[originalHeaders[header]]) : item[originalHeaders[header]]"
@@ -24,7 +24,6 @@
         </tbody>
       </table>
     </div>
-
     <nav id="nav-pages" aria-label="Page navigation example">
       <ul class="pagination mt-4">
         <li class="page-item" :class="{ disabled: currentPage === 1 }">
@@ -38,11 +37,14 @@
         </li>
       </ul>
     </nav>
+
   </div>
 </template>
 
 <script>
 import axios from 'axios';
+import { apiKey } from '../env.js';
+
 
 export default {
   props: {
@@ -56,8 +58,7 @@ export default {
       tableHeaders: [],
       maxVisiblePages: 5,
       originalHeaders: {},
-      dateHeaders: ['data_registro_ans'],
-      emailHeader: 'endereco_eletronico', 
+      dateHeaders: ['data_registro_ans']
     };
   },
   computed: {
@@ -89,10 +90,13 @@ export default {
         this.currentPage = page;
       }
     },
+    shouldCapitalize(header) {
+    return this.originalHeaders[header] !== 'endereco_eletronico';
+    },
     fetchData() {
       const url = this.searchQuery
-        ? `https://web-production-30e30.up.railway.app/operadoras/${this.searchQuery}`
-        : 'https://web-production-30e30.up.railway.app/operadoras';
+        ? `${apiKey}/${this.searchQuery}`
+        : `${apiKey}`;
 
       axios
         .get(url)
@@ -125,7 +129,7 @@ export default {
       const day = String(date.getDate()).padStart(2, '0');
       const month = String(date.getMonth() + 1).padStart(2, '0');
       const year = date.getFullYear();
-      return `<span class="math-inline">${day}/${month}/${year}</span>`;
+      return `${day}/${month}/${year}`;
     },
     isDateHeader(header) {
       return this.dateHeaders.includes(this.originalHeaders[header]);
@@ -145,11 +149,15 @@ export default {
 <style>
 .nav-pages,
 .pagination {
+  display: flex;
   align-self: center;
   justify-self: center;
   margin: 0 auto;
 }
 
+.pagination{
+  width: fit-content;
+}
 .container {
   flex-direction: column;
 }
@@ -166,27 +174,4 @@ body {
   font-family: 'Varela Round', sans-serif;
 }
 
-
-::-webkit-scrollbar {
-  width: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: #f1f1f1;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #888;
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #555;
-}
-
-
-html {
-  scrollbar-width: thin;
-  scrollbar-color: #888 #f1f1f1;
-}
 </style>

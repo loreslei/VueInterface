@@ -43,7 +43,6 @@
 
 <script>
 import axios from 'axios';
-import { apiKey } from '../env.js';
 
 
 export default {
@@ -95,8 +94,8 @@ export default {
     },
     fetchData() {
       const url = this.searchQuery
-        ? `${apiKey}/${this.searchQuery}`
-        : `${apiKey}`;
+        ? `https://web-production-30e30.up.railway.app/operadoras/${this.searchQuery}`
+        : 'https://web-production-30e30.up.railway.app/operadoras';
 
       axios
         .get(url)
